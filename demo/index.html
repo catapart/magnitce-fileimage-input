@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&lt;fileimage-input&gt; Demo</title>
+    <link rel="stylesheet" href="./demo-page.css">
+</head>
+<body>
+    <main class="centered-single-column">
+        <header class="full-width">
+            <div class="content centered-single-column">
+                <h1>The <code>fileimage-input</code> element</h1>
+            </div>
+        </header>
+        <article class="overview">
+            <h2>Overview</h2>
+            <p>The <code>&lt;fileimage-input&gt;</code> element is intended to be used in forms for collecting files or images from a user.</p>
+            <p>It uses an <code>&lt;input type="file"/&gt;</code> element for its file handling which means that it works identically to the "file" type input.</p>
+        </article>
+        <article class="basic">
+            <h2>Basic Example</h2>
+            <div class="description">
+                <p>The <code>&lt;fileimage-input&gt;</code> element is activated like other input elements, either by click or by key input. Once activated, the user is prompted with a dialog to select a file or an image from their local machine.</p>
+                <p>If the user selects an image, the image is processed into an <code>&lt;img&gt;</code> element and displayed in the input. The element will also provide the "Clear Selection" and "View Selection" options, when a selection has been made.</p>
+                <p>The "Clear Selection" option will clear the input, which ensures that any <code>FormData</code> generated from a wrapping <code>&lt;form&gt;</code> will not include the previously selected file/image.</p>
+                <p>The "View Selection" option will provide the selected file's data to the browser. In most browsers, this will open the image in a new context (Tab/Window) for full-size viewing, as well as open text-based files as their text content. Binary files are loaded by the browser as text, which is mostly useless to users.</p>
+            </div>
+            <div class="example">
+                <fileimage-input></fileimage-input>
+            </div>
+        </article>
+        <article class="customization">
+            <h2>Customization</h2>
+            <div class="description">
+                <p>The <code>&lt;fileimage-input&gt;</code> element allows text customization for its placeholder content, its "View Selection" link, and its "Clear Selection" link. Each of these can be customized using the element's <code>&lt;slot&gt;</code>s.</p>
+            </div>
+            <section>
+                <h4>Placeholder Attribute</h4>
+                <p>In this example the input has been given a <code>placeholder</code></code> attribute. Only the text is replaced.</p>
+                <div class="example">
+                    <fileimage-input placeholder="Custom value in placeholder attribute"></fileimage-input>
+                </div>
+            </section>
+            <section>
+                <h4>Slots</h4>
+                <p>In this example, each of the slots have been replaced with custom <code>&lt;span&gt;</code> elements</p>
+                <div class="example">
+                    <fileimage-input>
+                        <span slot="placeholder-icon">&#x2709;</span>
+                        <span slot="placeholder">Custom placeholder with a custom icon and custom links</span>
+                        <span slot="clear">Custom Clear</span>
+                        <span slot="view-link">Custom Preview</span>
+                    </fileimage-input>
+                </div>
+            </section>
+            <section>
+                <h4><code>block</code> Class</h4>
+                <p>In this example, the <code>&lt;fileimage-input&gt;</code> element has been given a class of <code>block</code>, which provides a block-style layout for the input, rather than the inline-style layout that is the default.</p>
+                <div class="example">
+                    <fileimage-input class="block"></fileimage-input>
+                </div>
+            </section>
+        </article>
+        <article class="form-data">
+            <style>
+                article.form-data form
+                {
+                    display: grid;
+                    gap: 1em;
+                    border: solid 1px #666;
+                    padding: 1em;
+                    border-radius: 5px;
+                }
+                article.form-data form > label
+                {
+                    display: grid;
+                    gap: .2em;
+                }
+                article.form-data form > footer
+                {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                }
+
+                
+                article.form-data input[type="text"]:invalid
+                {
+                    border-color: red;
+                }
+                article.form-data fileimage-input:invalid
+                {
+                    /* unlike other inputs, the fileimage-input includes links that
+                    *  are outside of its field. to simplify setting the field
+                    *  border color, --border-color has been provided
+                    */
+                    --border-color: red;
+                }
+                
+                article.form-data fileimage-input.custom .icon
+                {
+                    /* --placeholder-icon is provided by the fileimage-input element */
+                    --icon-primary-color: var(--placeholder-color);
+                }
+            </style>
+            <h2>Form Data</h2>
+            <div class="description">
+                <p>The <code>&lt;fileimage-input&gt;</code> element implements form handling so that all expected input functionality works as expected.</p>
+                <p>For example, adding a <code>required</code> attribute will prevent a form from submitting if the input isn't populated. It will also provide a validation message, in that case.</p>
+                <p>Similarly, collecting a <code>&lt;form&gt;</code> element's <code>FormData</code> during its <code>submit</code> event will provide the image data as a property labeled by the <code>&lt;fileimage-input&gt;</code>'s <code>name</code> attribute value.</p>
+                <p>In this example, all of the FormData is logged in the event log, when the form is submitted. One of the <code>&lt;fileimage-input&gt;</code> elements has been given a <code>required</code> attribute, and has been styled to indicate the <code>:invalid</code> state.</p>
+                <p>Additional form elements have been added for comparison. The text input rejects any numeric content, as a way to see an invalid text field for comparison.</p>
+            </div>
+            <div class="example">
+                <form>
+                    <h4>Simple Form</h4>
+                    <label>
+                        <span>Text Input (no digits)</span>
+                        <input type="text" pattern="[^\d]*?" placeholder="Basic input for comparison" name="text-data" />
+                    </label>
+                    <label>
+                        <span>Required Input</span>
+                        <fileimage-input required name="required-image"></fileimage-input>
+                    </label>
+                    <label>
+                        <span>Customized <small><em>(only accepts .jpg and .gif)</em></small></span>
+                        <fileimage-input class="custom block" name="custom-image" accept="image/gif, image/jpeg">
+                            <span slot="placeholder-icon">
+                                <svg slot="icon" width="40px" class="icon file" viewBox="0 0 22.812714 22.814663" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+                                    <path
+                                    style="fill:var(--icon-secondary-color,InfoBackground);stroke:var(--icon-primary-color,InfoText);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+                                    d="M 3.2868718,1.1832965 H 19.525832 c 0.29256,0 0.52808,0.23535 0.52808,0.52768 V 21.103686 c 0,0.29234 -0.23552,0.52768 -0.52808,0.52768 H 3.2868718 c -0.29255,0 -0.52807,-0.23534 -0.52807,-0.52768 V 1.7109765 c 0,-0.29233 0.23552,-0.52768 0.52807,-0.52768 z" />
+                                    <path
+                                    style="color:#000000;fill:var(--icon-primary-color,InfoText);fill-opacity:1;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none"
+                                    d="m 5.3448518,3.0908565 c -0.29255,0 -0.52788,0.23517 -0.52788,0.52749 v 4.50924 c 0,0.29234 0.23533,0.52749 0.52788,0.52749 h 6.0050702 c 0.29255,0 0.52789,-0.23515 0.52789,-0.52749 v -4.50924 c 0,-0.29232 -0.23534,-0.52749 -0.52789,-0.52749 z m 8.8552002,0.39689 c -0.56451,1.3e-4 -1.02173,0.45768 -1.0214,1.02176 1.1e-4,0.56379 0.45722,1.02049 1.0214,1.02062 h 3.0755 c 0.56451,2.6e-4 1.02241,-0.45656 1.02252,-1.02062 2.2e-4,-0.56436 -0.4578,-1.02203 -1.02252,-1.02176 z m 0.0986,3.24542 c -0.56451,1.3e-4 -1.02173,0.45768 -1.02141,1.02176 1.1e-4,0.56379 0.45723,1.02049 1.02141,1.02062 h 3.07549 c 0.56451,2.6e-4 1.02243,-0.45656 1.02254,-1.02062 2.2e-4,-0.56436 -0.45781,-1.02203 -1.02254,-1.02176 z M 5.2524718,10.113686 c -0.56451,1.3e-4 -1.02167,0.45768 -1.02141,1.02176 1.5e-4,0.5638 0.45718,1.0205 1.02141,1.02063 H 17.558362 c 0.5645,2.6e-4 1.0224,-0.45656 1.02254,-1.02063 2.6e-4,-0.56436 -0.45774,-1.02202 -1.02254,-1.02176 z m 0,3.53027 c -0.5645,1.3e-4 -1.02167,0.45769 -1.02141,1.02175 1.3e-4,0.5638 0.45718,1.02107 1.02141,1.0212 H 17.558362 c 0.56451,2.7e-4 1.02241,-0.45712 1.02254,-1.0212 2.6e-4,-0.56434 -0.45775,-1.02201 -1.02254,-1.02175 z m 0,3.53308 c -0.56423,1.3e-4 -1.02128,0.4574 -1.02141,1.0212 1.3e-4,0.56379 0.45718,1.02049 1.02141,1.02062 H 17.558362 c 0.56451,2.6e-4 1.02241,-0.45654 1.02254,-1.02062 -1.3e-4,-0.56408 -0.45803,-1.02146 -1.02254,-1.0212 z" />
+                                </svg>
+                            </span>
+                            <span slot="placeholder">Click or Drag and Drop an image here</span>
+                        </fileimage-input>
+                    </label>
+                    <label>
+                        <span>File Input <small><em>(default HTML image handling, for comparison)</em></small></span>
+                        <input type="file" placeholder="File input for comparison" name="file-data" />
+                    </label>
+                    <footer>
+                        <button>Submit</button>
+                    </footer>
+                </form>
+            </div>
+            <div class="log">
+                <header>
+                    <span class="title">Log</span>
+                </header>
+                <ul></ul>
+            </div>
+            <script type="module">
+                const formDataExample = document.querySelector('article.form-data');
+                const formDataForm = formDataExample.querySelector('form');
+                const formDataLog = document.querySelector('article.form-data .log ul');
+                document.addEventListener('DOMContentLoaded', () =>
+                {
+
+                    formDataExample.querySelector('fileimage-input[required]').addEventListener('change', (event) =>
+                    {
+                        console.log(event.target.value);
+                        console.log(event.target.files);
+                    });
+                    formDataExample.querySelector('fileimage-input.custom').addEventListener('deny', (event) =>
+                    {
+                        console.log(event.detail);
+                        logFormResult({ type: 'deny', error: event.detail.message, fileType: event.detail.file?.type, accepted: event.detail.accepted });
+                    });
+                    // sets the validation message for a required element
+                    formDataExample.querySelector('fileimage-input[required]').setCustomValidity('This custom error message warns that the image field is required.');
+
+                    formDataForm.addEventListener('submit', (event) =>
+                    {
+                        // dummy form; prevent effects
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        const formData = new FormData(event.target);
+                        console.log([...formData]);
+                        
+                        // use the name attribute's value to get the data from the FormData object
+                        const requiredImage = formData.get('required-image');
+                        console.log(requiredImage);
+
+                        // translate getter/setters into direct values
+                        // so they can be logged using JSON.stringify()
+                        const requiredImageData = {
+                            lastModified: requiredImage.lastModified,
+                            lastModifiedDate: requiredImage.lastModifiedDate,
+                            name: requiredImage.name,
+                            size: requiredImage.size,
+                            type: requiredImage.type,
+                        };
+
+                        const customImage = formData.get('custom-image');
+                        const customImageData = customImage == null ? undefined : {
+                            lastModified: customImage.lastModified,
+                            lastModifiedDate: customImage.lastModifiedDate,
+                            name: customImage.name,
+                            size: customImage.size,
+                            type: customImage.type,
+                        };
+
+                        const file = formData.get('file-data');
+                        const fileData = file == null ? undefined : {
+                            lastModified: file.lastModified,
+                            lastModifiedDate: file.lastModifiedDate,
+                            name: file.name,
+                            size: file.size,
+                            type: file.type,
+                        };
+
+                        const data = {
+                            textData: formData.get('text-data'),
+                            requiredImage: requiredImageData,
+                            customImage: customImageData,
+                            fileData: fileData
+                        };
+                        logFormResult(data);
+
+                        return false;
+                    })
+                });  
+                function logFormResult(result)
+                {
+                    const entry = document.createElement('li');
+                    entry.classList.add('entry');
+                    const code = document.createElement('code');
+                    const pre = document.createElement('pre');
+                    pre.textContent = JSON.stringify(result, null, 2);
+                    code.append(pre);
+                    entry.append(code);
+                    formDataLog.append(entry);
+                }                
+            </script>
+        </article>
+    </main>
+    <script type="module" src="../vanilla/fileimage-input.js"></script>
+</body>
+</html>
