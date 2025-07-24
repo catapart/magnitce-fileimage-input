@@ -1,8 +1,6 @@
 declare class FileImageInputElement extends HTMLElement {
     #private;
     componentParts: Map<string, HTMLElement>;
-    getPart<T extends HTMLElement = HTMLElement>(key: string): T;
-    findPart<T extends HTMLElement = HTMLElement>(key: string): T;
     get files(): FileList | null;
     constructor();
     connectedCallback(): void;

@@ -8,21 +8,21 @@ const COMPONENT_TAG_NAME = 'fileimage-input';
 export class FileImageInputElement extends HTMLElement
 {
     componentParts: Map<string, HTMLElement> = new Map();
-    getPart<T extends HTMLElement = HTMLElement>(key: string)
-    {
-        if(this.componentParts.get(key) == null)
-        {
-            const part = this.shadowRoot!.querySelector(`[part="${key}"]`) as HTMLElement;
-            if(part != null) { this.componentParts.set(key, part); }
-        }
+    // getPart<T extends HTMLElement = HTMLElement>(key: string)
+    // {
+    //     if(this.componentParts.get(key) == null)
+    //     {
+    //         const part = this.shadowRoot!.querySelector(`[part="${key}"]`) as HTMLElement;
+    //         if(part != null) { this.componentParts.set(key, part); }
+    //     }
 
-        return this.componentParts.get(key) as T;
-    }
-    findPart<T extends HTMLElement = HTMLElement>(key: string) { return this.shadowRoot!.querySelector(`[part="${key}"]`) as T; }
+    //     return this.componentParts.get(key) as T;
+    // }
+    // findPart<T extends HTMLElement = HTMLElement>(key: string) { return this.shadowRoot!.querySelector(`[part="${key}"]`) as T; }
 
     get files(): FileList|null
     {
-        return this.findPart<HTMLInputElement>('input').files;
+        return this.shadowRoot!.querySelector<HTMLInputElement>('input')?.files ?? null;
     }
     #previewURL?: string;
 
@@ -35,9 +35,9 @@ export class FileImageInputElement extends HTMLElement
         this.attachShadow({ mode: "open" });
         this.shadowRoot!.innerHTML = html;
         this.shadowRoot!.adoptedStyleSheets.push(COMPONENT_STYLESHEET);
-        this.findPart('label').tabIndex = 0;
+        this.shadowRoot!.querySelector<HTMLElement>('.label')!.tabIndex = 0;
 
-        const placeholderLabel = this.findPart('placeholder-label');
+        const placeholderLabel = this.shadowRoot!.querySelector('.placeholder-label');
         if(placeholderLabel != null)
         {
             placeholderLabel.textContent = this.getAttribute('placeholder') ?? "Select a file...";
@@ -47,7 +47,7 @@ export class FileImageInputElement extends HTMLElement
         this.updateFormStatus();
 
         // assign handlers
-        const input = this.findPart<HTMLInputElement>('input');
+        const input = this.shadowRoot!.querySelector<HTMLInputElement>('input')!;
         input.addEventListener("input", () => 
         {
             const value = (input.files == null) ? null : input.files[0];
@@ -59,12 +59,12 @@ export class FileImageInputElement extends HTMLElement
         {
             if(event.code == "Space" || event.code == "Enter" || event.code == "NumpadEnter")
             {
-                this.findPart<HTMLInputElement>('input').click();
+                this.shadowRoot!.querySelector<HTMLInputElement>('input')!.click();
                 event.preventDefault();
                 event.stopPropagation();
             }
         });
-        this.findPart<HTMLInputElement>('clear').addEventListener("click", (event: Event) => 
+        this.shadowRoot!.querySelector<HTMLInputElement>('.clear')!.addEventListener("click", (event: Event) => 
         {
             event.preventDefault();
             event.stopPropagation();
@@ -72,7 +72,7 @@ export class FileImageInputElement extends HTMLElement
             this.dispatchEvent(new Event('change'));
             return false;
         });
-        this.findPart<HTMLInputElement>('clear').addEventListener("keydown", (event: KeyboardEvent) => 
+        this.shadowRoot!.querySelector<HTMLInputElement>('.clear')!.addEventListener("keydown", (event: KeyboardEvent) => 
         {
             if(event.code == "Space" || event.code == "Enter" || event.code == "NumpadEnter")
             {
@@ -96,7 +96,7 @@ export class FileImageInputElement extends HTMLElement
             event.preventDefault();
             if(event.dataTransfer == null) { return; }
 
-            const accepted = this.findPart('input').getAttribute('accept')!.split(',')
+            const accepted = this.shadowRoot!.querySelector('input')!.getAttribute('accept')!.split(',')
             .map(item => item.trim());
 
             if(event.dataTransfer.items)
@@ -172,7 +172,7 @@ export class FileImageInputElement extends HTMLElement
 
         if(attributeName == 'accept')
         {
-            this.findPart<HTMLInputElement>('input').setAttribute('accept', newValue);
+            this.shadowRoot!.querySelector<HTMLInputElement>('input')!.setAttribute('accept', newValue);
         }
     }
 
@@ -180,12 +180,12 @@ export class FileImageInputElement extends HTMLElement
     {
         if(file == null)
         {
-            this.findPart<HTMLImageElement>('preview').removeAttribute('src');
-            this.findPart<HTMLAnchorElement>('view-link').href = "#";
-            this.findPart('filename').textContent = "";
+            this.shadowRoot!.querySelector<HTMLImageElement>('.preview')!.removeAttribute('src');
+            this.shadowRoot!.querySelector<HTMLAnchorElement>('.view-link')!.href = "#";
+            this.shadowRoot!.querySelector('.filename')!.textContent = "";
             this.removeAttribute('specified');
             this.classList.remove('file', 'image');
-            const placeholderLabel = this.findPart('placeholder-label');
+            const placeholderLabel = this.shadowRoot!.querySelector('.placeholder-label');
             if(placeholderLabel != null)
             {
                 placeholderLabel.textContent = this.getAttribute('placeholder') ?? "Select a file...";
@@ -199,7 +199,7 @@ export class FileImageInputElement extends HTMLElement
             return;
         }
 
-        this.findPart('filename').textContent = file.name;
+        this.shadowRoot!.querySelector('.filename')!.textContent = file.name;
         this.toggleAttribute('specified', true);
 
         if(file.type.startsWith('image'))
@@ -209,7 +209,7 @@ export class FileImageInputElement extends HTMLElement
             reader.addEventListener('load', (event) =>
             {
                 const result = event.target?.result as string;
-                this.findPart<HTMLImageElement>('preview').src = result;
+                this.shadowRoot!.querySelector<HTMLImageElement>('.preview')!.src = result;
             });
             reader.readAsDataURL(file);
         }
@@ -222,7 +222,7 @@ export class FileImageInputElement extends HTMLElement
         this.#previewURL = window.URL.createObjectURL(file);   
 
         // Create View Link
-        this.findPart<HTMLAnchorElement>('view-link').href = this.#previewURL;
+        this.shadowRoot!.querySelector<HTMLAnchorElement>('.view-link')!.href = this.#previewURL;
     }
 
     ///// Form Functionality ///// 
@@ -233,7 +233,7 @@ export class FileImageInputElement extends HTMLElement
 
     get value(): File|null
     {
-        const input = this.findPart<HTMLInputElement>('input');
+        const input = this.shadowRoot!.querySelector<HTMLInputElement>('input')!;
         return (input.files == null) ? null : input.files[0];
     }
     set value(val: File|null)
@@ -243,7 +243,7 @@ export class FileImageInputElement extends HTMLElement
         {
             transfer.items.add(val);
         }
-        const input = this.findPart<HTMLInputElement>('input');
+        const input = this.shadowRoot!.querySelector<HTMLInputElement>('input')!;
         input.files = transfer.files;
         this.updateFormStatus();
         this.updatePreview((input.files == null) ? null : input.files[0]);
@@ -262,18 +262,18 @@ export class FileImageInputElement extends HTMLElement
     setCustomValidity(value: string)
     {
         this.#validationMessage = value;
-        const input = this.findPart<HTMLInputElement>('input');
+        const input = this.shadowRoot!.querySelector<HTMLInputElement>('input')!;
         const formValue = (input.files == null) ? null : input.files[0];
         this.#internals.setValidity(
             { valueMissing: (this.getAttribute('required') != null && formValue == null) },
             this.#validationMessage,
-            this.findPart('label')
+            this.shadowRoot!.querySelector<HTMLElement>('.label')!
         );
     }
   
     formDisabledCallback(disabled: boolean) 
     {
-        this.findPart<HTMLInputElement>('input').disabled = disabled;
+        this.shadowRoot!.querySelector<HTMLInputElement>('input')!.disabled = disabled;
     }
 
     formResetCallback() 
@@ -292,12 +292,12 @@ export class FileImageInputElement extends HTMLElement
 
     updateFormStatus()
     {
-        const input = this.findPart<HTMLInputElement>('input');
+        const input = this.shadowRoot!.querySelector<HTMLInputElement>('input')!;
         const formValue = (input.files == null) ? null : input.files[0];
         this.#internals.setValidity(
             { valueMissing: (this.getAttribute('required') != null && formValue == null) },
             this.#validationMessage,
-            this.findPart('label')
+            this.shadowRoot!.querySelector<HTMLElement>('label')!
         );
         
         this.#internals.setFormValue(formValue);

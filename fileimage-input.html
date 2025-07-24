@@ -1,15 +1,15 @@
-<label part="label" tabindex="0">
-    <input type="file" part="input text" />
-    <span part="field text">
-        <span part="thumbnail">
-            <slot name="placeholder-icon"><span part="placeholder-icon">🗎</span></slot>
-            <img alt="image preview" title="Image Preview" part="preview" />
+<label class="label" part="label" tabindex="0">
+    <input type="file" class="input" part="input text" />
+    <span class="field text" part="field text">
+        <span class="thumbnail" part="thumbnail">
+            <slot name="placeholder-icon"><span class="placeholder-icon" part="placeholder-icon">🗎</span></slot>
+            <img alt="image preview" title="Image Preview" class="preview" part="preview" />
         </span>
-        <span part="status">
-            <span part="filename"></span>
-            <slot name="placeholder"><span part="placeholder-label"></span></slot>
+        <span class="status" part="status">
+            <span class="filename" part="filename"></span>
+            <slot name="placeholder"><span class="placeholder-label" part="placeholder-label"></span></slot>
         </span>
     </span>
 </label>
-<a href="" part="clear" tabindex="0"><slot name="clear">Clear Selection</slot></a>
-<a href="#" target="_blank" part="view-link" tabindex="0"><slot name="view-link">View Selection</slot></a>
+<a href="" class="clear" part="clear" tabindex="0"><slot name="clear">Clear Selection</slot></a>
+<a href="#" target="_blank" class="view-link" part="view-link" tabindex="0"><slot name="view-link">View Selection</slot></a>

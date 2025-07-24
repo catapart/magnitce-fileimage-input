@@ -25,32 +25,32 @@
 {
     grid-template-columns: 1fr 1fr;
 }
-:host(.block) [part="label"]
+:host(.block) .label
 {
     grid-column: span 2;
     grid-row: 1;
 }
-:host(.block) [part="field"]
+:host(.block) .field
 {
     border: dashed 1px #666;
     display: grid;
     gap: .5em;
     justify-items: center;
 }
-:host(.block) [part="preview"]
+:host(.block) .preview
 {
     height: 70px;
 }
-:host(.block) [part="placeholder-icon"]
+:host(.block) .placeholder-icon
 {
     font-size: 3em;
 }
-:host(.block) [part="clear"]
+:host(.block) .clear
 {
     grid-column: 1;
     grid-row: 2;
 }
-:host(.block) [part="view-link"]
+:host(.block) .view-link
 {
     grid-column: 2;
     grid-row: 2;
@@ -63,7 +63,7 @@ input
     display: none;
 }
 
-[part="label"]
+.label
 {
     flex: 1;
     display: flex;
@@ -72,7 +72,7 @@ input
     overflow: hidden;
 }
 
-[part="field"]
+.field
 {
     flex: 1;
     white-space: nowrap;
@@ -95,33 +95,33 @@ input
     min-width: 0;
 
 }
-[part="field"]:focus-visible
-,[part="field"]:focus
+.field:focus-visible
+,.field:focus
 {
     outline: solid 2px;
     border-radius: 3px;
 }
 
-[part="status"]
+.status
 {
     overflow: hidden;
 }
 
-[part="preview"][src=""]
-,[part="preview"]:not([src])
+.preview[src=""]
+,.preview:not([src])
 {
     display: none;
 }
-[part="preview"]
+.preview
 {
     height: 1em;
 }
 
-[part="view-link"][href="#"]
+.view-link[href="#"]
 {
     display: none;
 }
-[part="view-link"]
+.view-link
 {
     white-space: nowrap;
     font-size: .75em;
@@ -130,29 +130,29 @@ input
     align-self: center;
 }
 
-[part="thumbnail"]
+.thumbnail
 {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-[part="placeholder-label"]
-,[part="placeholder-icon"]
+.placeholder-label
+,.placeholder-icon
 ,::slotted([slot="placeholder"])
 ,::slotted([slot="placeholder-icon"])
 {
     color: var(--placeholder-color);
 }
-:host([specified]) [part="placeholder-label"]
-,:host([specified].image) [part="placeholder-icon"]
+:host([specified]) .placeholder-label
+,:host([specified].image) .placeholder-icon
 ,:host([specified]) ::slotted([slot="placeholder"])
 ,:host([specified].image) ::slotted([slot="placeholder-icon"])
 {
     display: none;
 }
 
-[part="clear"]
+.clear
 {
     display: none;
     white-space: nowrap;
@@ -161,7 +161,7 @@ input
     grid-row: 1;
     align-self: center;
 }
-:host([specified]) [part="clear"]
+:host([specified]) .clear
 {
     display: block;
 }
