@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsup fileimage-input.ts --format cjs,esm --dts --clean",
     "copyToDemo": "node -e \"const fs = require('fs'); fs.cpSync('dist', 'demo/dist', {recursive: true});\"",
-    "minify": "tsup fileimage-input.ts --format esm --config ./tsup.config.min.ts --outDir ./vanilla --minify",
+    "minify": "tsup fileimage-input.ts --format esm --config ./tsup.config.min.ts --outDir ./demo/dist --minify",
     "lint": "tsup fileimage-input.ts --format esm --tsconfig ./tsconfig.lint.json",
     "package": "npm run build && npm run minify && npm run copyToDemo",
     "release": "npm run package && changeset publish"
