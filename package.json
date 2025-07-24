@@ -1,6 +1,6 @@
 {
   "name": "@magnit-ce/fileimage-input",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A custom html input element that accepts a file or an image and provides a simple preview for common image value use-cases.",
   "type": "module",
   "main": "dist/fileimage-input.js",

@@ -1,5 +1,11 @@
 # @magnit-ce/fileimage-input
 
+## 0.0.4
+
+### Patch Changes
+
+- 0976382: refactored element to use class selectors instead of part selectors
+
 ## 0.0.3
 
 ### Patch Changes
