@@ -2,25 +2,26 @@
   "name": "@magnit-ce/fileimage-input",
   "version": "0.0.4",
   "description": "A custom html input element that accepts a file or an image and provides a simple preview for common image value use-cases.",
-  "type": "module",
-  "main": "dist/fileimage-input.js",
-  "module": "dist/fileimage-input.mjs",
+  "main": "dist/fileimage-input.umd.js",
+  "module": "dist/fileimage-input.js",
   "types": "dist/fileimage-input.d.ts",
+  "type": "module",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup fileimage-input.ts --format cjs,esm --dts --clean",
-    "copyToDemo": "node -e \"const fs = require('fs'); fs.cpSync('dist', 'demo/dist', {recursive: true});\"",
-    "minify": "tsup fileimage-input.ts --format esm --config ./tsup.config.min.ts --outDir ./demo/dist --minify",
-    "lint": "tsup fileimage-input.ts --format esm --tsconfig ./tsconfig.lint.json",
-    "package": "npm run build && npm run minify && npm run copyToDemo",
-    "release": "npm run package && changeset publish"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "build-tests": "vite build --config vite.config.tests.ts",
+    "changeset": "npx @changesets/cli",
+    "release": "npm run build && npx @changesets/cli publish"
   },
   "keywords": [
     "custom",
     "element",
     "html",
+    "browser",
     "file",
     "image",
     "picture",
@@ -29,17 +30,20 @@
     "preview",
     "selected"
   ],
+  "devDependencies": {
+    "@changesets/cli": "^2.27.7",
+    "@magnit-ce/test-runner": "^0.0.8",
+    "@rollup/plugin-terser": "^1.0.0",
+    "changesets": "^1.0.2",
+    "glob": "^13.0.0",
+    "typescript": "^5.5.3",
+    "vite": "^8.0.0",
+    "vite-plugin-dts": "^4.5.4"
+  },
   "author": "catapart",
   "license": "CC0-1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/catapart/magnitce-fileimage-input"
-  },
-  "devDependencies": {
-    "@changesets/cli": "^2.27.7",
-    "minify": "^11.4.0",
-    "terser": "^5.31.3",
-    "tsup": "^8.2.0",
-    "typescript": "^5.5.3"
   }
 }
